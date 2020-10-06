@@ -140,6 +140,50 @@ int foo(...)
 }
 ```
 
+**Conditional Statements:** Conditional statements use the following style
+```C
+// if-statement
+if(condition)
+{
+    // some code
+}
+else if(condition)
+{
+    // some code
+}
+else
+{
+    // some code
+}
+// Tip: Compilers may or may not throw an error on dangling else. To avoid problems, always use braces to specify the blocks.
+
+// switch-statement
+switch(var)
+{
+    // single-line statements'  style
+    case c1:    some_code;         break;
+    case c2:    some_other_code;   break;  // all break(s) should be aligned properly for single-line statements
+    // multi-line statements' style
+    case c3:    some_code;
+                some_other_code;
+                yet_another_code;
+                break;
+
+    default:    the_default_code;
+                the_default_code;
+                break;
+}
+
+// ternary/conditional operator
+// A General Rule:  Use ternary operator only while setting a value, or execute single-line commands
+//                  Use if-statments for everything else.
+
+// Use case 1
+int startPoint = (num%2 == 0) ? 0 : 1;
+// Use case 2
+(temperature > threshold) ? vRing_Alarm() : sleep();
+```
+
 **Structures:** All structure types should be defined in the following style
 ```C
 typedef struct

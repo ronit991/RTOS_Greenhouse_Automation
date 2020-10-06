@@ -48,4 +48,4 @@ All of the application layer code is structured within the following files:-
 | ghNetwork.c      | Definition of functions declared in ghNetwork.h                                                                           |
 | main.c           | Program execution flow                                                                                                    |
 
-For more details of code and contribution guidelines, refer to _CodeStructure.md_ file.
+For more details of code and contribution guidelines, refer to [CodeStructure.md](https://github.com/ronit991/RTOS_Greenhouse_Automation/blob/master/CodeStructure.md) file.
