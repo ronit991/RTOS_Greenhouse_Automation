@@ -13,44 +13,49 @@ Two-way microswitches and SPDT Relays are used for manual control of various thi
 
 **IDE used:** System Workbench for STM32 ([available here](https://www.st.com/en/development-tools/sw4stm32.html))
 
-![software_stack](https://drive.google.com/file/d/1kygPza72iMTBUeCbkeIeD2bGRs0y-__Z/view?usp=sharing)
-
 | Software Stack |
 | :--: |
-| <br/> **Firmware Layer** <br/> ( ST Standard Peripheral Library ) |
-| <br/> **Operating System Layer** <br/> ( FreeRTOS ) |
-| <br/> **Networking Layer** <br/> _Networking abilities will be added later_ |
-| <br/> **Application Layer** |
+| <br/> **Firmware Layer** <br/> ( ST Standard Peripheral Library ) <br/> .|
+| <br/> **Operating System Layer** <br/> ( FreeRTOS ) <br/> .|
+| <br/> **Networking Layer** <br/> _Networking abilities will be added later_ <br/> .|
+| <br/> **Application Layer** <br/> .|
 
 
 All of the application layer code is structured within the following files:-
-| File | Contents |
-|------|---------|
-| ghRTOS.h | Std Library Files, Architecture-specific files, and prototypes of generic & MCU-specific hardware configuration functions |
-| ghRTOS.c | Definitions of functions declared in ghRTOS.h |
-| ghAutomation.h | Configuration APIs for the hardware used in automation |
-| ghAutomation.c | Definition of functions declared in ghAutomation.h |
-| ghNetwork.h | Configuration APIs for the hardware used for communication & networking purposes |
-| ghNetwork.c | Definition of functions declared in ghNetwork.h|
-| main.c | Program execution flow |
+| File             | Contents                                                                                                                  |
+|------------------|---------------------------------------------------------------------------------------------------------------------------|
+| ghRTOS.h         | Std Library Files, Architecture-specific files, and prototypes of generic & MCU-specific hardware configuration functions |
+| ghRTOS.c         | Definitions of functions declared in ghRTOS.h                                                                             |
+| ghAutomation.h   | Configuration APIs for the hardware used in automation                                                                    |
+| ghAutomation.c   | Definition of functions declared in ghAutomation.h                                                                        |
+| ghNetwork.h      | Configuration APIs for the hardware used for communication & networking purposes                                          |
+| ghNetwork.c      | Definition of functions declared in ghNetwork.h                                                                           |
+| main.c           | Program execution flow                                                                                                    |
+|------------------|---------------------------------------------------------------------------------------------------------------------------|
+
 
 ### Naming Convention
+
 **Variables**
-| Data Type | Prefix | Comments |
-|:-----------|:--------:|----------|
-| uint32_t | ul | 'u' denotes "unsigned" and 'l' denotes "long" |
-| uint16_t | us | 'u' denotes "unsigned" and 's' denotes "short" |
-| uint8_t | uc | 'u' denotes "unsigned" and 'c' denotes "char" |
-| int | i | 'i' denotes "int" |
-| char | c | 'c' denotes "char" |
-| float | f | 'f' denotes "float" |
-| void | v | 'v' denotes "void" |
-| user_defined_data_type | x | . |
-| | ----------
+
+| Data Type                 | Prefix     | Comments                                       |
+|:--------------------------|:----------:|------------------------------------------------|
+| uint32_t                  | ul         | 'u' denotes "unsigned" and 'l' denotes "long"  |
+| uint16_t                  | us         | 'u' denotes "unsigned" and 's' denotes "short" |
+| uint8_t                   | uc         | 'u' denotes "unsigned" and 'c' denotes "char"  |
+| int                       | i          | 'i' denotes "int"                              |
+| short                     | s          | 's' denotes "short"                            |
+| char                      | c          | 'c' denotes "char"                             |
+| float                     | f          | 'f' denotes "float"                            |
+| void                      | v          | 'v' denotes "void"                             |
+| user_defined_data_type    | x          | .                                              |
+|---------------------------|------------|------------------------------------------------|
 
 
 All of the variables follow **Snake_Case** afterwards.  
-Pointer types are prefixed with a 'p' followed by the data-type-prefix followed by the variable name.  
+Pointer types are prefixed with a _'p'_ followed by the _data-type-prefix_ followed by the _variable-name_.  
+
+**Convention for arrays is not decided yet.**
 
 Few examples are given below:
 ```C
@@ -63,7 +68,8 @@ void* pvBuffer;
 **Functions**
 
 Function names are prefixed with the data type of their respective return values.  
-All prefix(s) are same as described in the previous section.  
+All prefixes are same as described in the previous section.  
+Static functions (excluding those defined in main.c) have a prefix _"prv"_ followed by the function name. These functions do not have a _return-type-prefix_ as they aren't meant to be called from the outside world.
 
 Example:
 ```C
@@ -80,7 +86,7 @@ char* pcFun2(...)
     .
     .
     .
-    return &message;  // message is a character array defined globally
+    return message;  // message is a character array defined globally
 }
 ```
 
