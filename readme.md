@@ -1,6 +1,13 @@
 # GreenHouse Automation Project
 
 This Project aims to automate the functions/operations/tasks in a greenhouse.
+Major tasks:
+* Monitor and maintain the desired temperature in the greenhouse.
+* Monitor and maintain the desired humidity/moisture in the greenhouse.
+* Maintain appropriate level in the water reservoir.
+* Automate the irrigation process based on soil moisture.
+* Notify the owner in case of fire, excessive wind, and crop damage due to excess IR/UV Light.
+* Sync everything with a cloud server.
 
 ## **Hardware**
 ### **MCU**
@@ -8,6 +15,15 @@ ST Nucleo-64 Board ([available here](https://www.st.com/en/evaluation-tools/nucl
 
 ### **Switches & Relays**
 Two-way microswitches and SPDT Relays are used for manual control of various things.
+
+### **Temperature Sensor**
+Not yet finalised... will be using DHT11 meanwhile for initial development and testing.
+
+### **Humidity Sensor**
+Not yet finalised... will be using DHT11 meanwhile for initial development and testing.
+
+### **Soil Moisture Sensor**
+Capacitive Sensor. \< More details need to be added here \>
 
 ## **Software**
 
@@ -31,76 +47,5 @@ All of the application layer code is structured within the following files:-
 | ghNetwork.h      | Configuration APIs for the hardware used for communication & networking purposes                                          |
 | ghNetwork.c      | Definition of functions declared in ghNetwork.h                                                                           |
 | main.c           | Program execution flow                                                                                                    |
-|------------------|---------------------------------------------------------------------------------------------------------------------------|
 
-
-### Naming Convention
-
-**Variables**
-
-| Data Type                 | Prefix     | Comments                                       |
-|:--------------------------|:----------:|------------------------------------------------|
-| uint32_t                  | ul         | 'u' denotes "unsigned" and 'l' denotes "long"  |
-| uint16_t                  | us         | 'u' denotes "unsigned" and 's' denotes "short" |
-| uint8_t                   | uc         | 'u' denotes "unsigned" and 'c' denotes "char"  |
-| int                       | i          | 'i' denotes "int"                              |
-| short                     | s          | 's' denotes "short"                            |
-| char                      | c          | 'c' denotes "char"                             |
-| float                     | f          | 'f' denotes "float"                            |
-| void                      | v          | 'v' denotes "void"                             |
-| user_defined_data_type    | x          | .                                              |
-|---------------------------|------------|------------------------------------------------|
-
-
-All of the variables follow **Snake_Case** afterwards.  
-Pointer types are prefixed with a _'p'_ followed by the _data-type-prefix_ followed by the _variable-name_.  
-
-**Convention for arrays is not decided yet.**
-
-Few examples are given below:
-```C
-uint32_t ulToken_Count;
-float fTemperature = 0;
-char cUART_Tx_buffer;
-void* pvBuffer;
-```
-
-**Functions**
-
-Function names are prefixed with the data type of their respective return values.  
-All prefixes are same as described in the previous section.  
-Static functions (excluding those defined in main.c) have a prefix _"prv"_ followed by the function name. These functions do not have a _return-type-prefix_ as they aren't meant to be called from the outside world.
-
-Example:
-```C
-int iFun1(...)
-{
-    int x;
-    .
-    .
-    return x;
-}
-
-char* pcFun2(...)
-{
-    .
-    .
-    .
-    return message;  // message is a character array defined globally
-}
-```
-
-**Macros**
-
-### Formatting Styles
-
-**Indentation**: Code is indented with a tab size of 4.  
-**Braces**:  
-
-```C
-int foo(...)
-{
-    // Opening and Closing braces follow this style.
-    // Code within the block appears one "tab" succeeding the column of the braces
-}
-```
+For more details of code and contribution guidelines, refer to _CodeStructure.md_ file.
