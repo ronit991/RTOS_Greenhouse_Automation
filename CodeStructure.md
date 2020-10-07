@@ -169,6 +169,10 @@ switch(var)
                 yet_another_code;
                 break;
 
+    case c4:    some_code;                  // break is omitted here for so & so reason.
+                                            // Always place a comment for fall-through like this.
+    case c5:    some_other_code;    break;
+
     default:    the_default_code;
                 the_default_code;
                 break;
