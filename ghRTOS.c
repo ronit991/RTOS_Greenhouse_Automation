@@ -1,38 +1,16 @@
-/*
- * ghRTOS.c
- * @description - .
- */
+/* */
 #include "ghRTOS.h"
-
-// Define "rENABLE_USART_INTERRUPT" to enable receive-interrupts from USART2
-// Define "rENABLE_BUTTON_INTERRUPT" to enable interrupt from user button
-
-void SetupHardware(void)
-{
-	DWT->CTRL |= (1<<0);			//	Enable DWT Cycle Count (DWTCYCCNT) Register.
-									//	This register keeps count of no. of clock cycles completed after processor reset.
-
-	RCC_DeInit();					// Reset clock to the default HSI configuration
-	SystemCoreClockUpdate();		// Update system core clock variable to use the 16MHz value
-
-	prvSetupHW();					// Setup MCU specific peripherals
-
-	// Start Recording from Segger SysView
-	SEGGER_SYSVIEW_Conf();
-	SEGGER_SYSVIEW_Start();
-}
+// Define "rENABLE_USART_INTERRUPT"  in IDE settings to enable receive-interrupts from USART2
+// Define "rENABLE_BUTTON_INTERRUPT" in IDE settings to enable interrupt from user button
 
 
-void prvSetupHW(void)
-{
-	//	Use UART to communicate to PC
-	prvSetupUART();
 
-	// Use on-board led and button
-	prvSetupNucleoButtonAndLED();
-}
+// DWT Cycle Count Register Overflow Stores
+uint32_t CYCCNT_OVERFLOW_COUNTS[2] = {0,0};
 
-void prvSetupNucleoButtonAndLED(void)
+
+
+static void prvSetupNucleoButtonAndLED(void)
 {
 	// Button PC13, LED PA5
 
@@ -80,7 +58,9 @@ void prvSetupNucleoButtonAndLED(void)
 #endif
 }
 
-void prvSetupUART(void)
+
+
+static void prvSetupUART(void)
 {
 	//	PA2 is USART2 Tx, PA3 is USART2 Rx
 	//	1. Enable UART2 and GPIOA Peripheral Clock
@@ -102,7 +82,7 @@ void prvSetupUART(void)
 
 	// Configuration for USART2 Peripheral
 	USART_InitTypeDef UART2config;
-	memset(&UART2config, 0, sizeof(UART2config));			//	Reset all variables of the structure before initializing
+	memset(&UART2config, 0, sizeof(UART2config));			    //	Reset all variables of the structure before initializing
 	UART2config.USART_BaudRate = 115200;
 	UART2config.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
 	UART2config.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
@@ -130,11 +110,77 @@ void prvSetupUART(void)
 	USART_Cmd(USART2, ENABLE);
 }
 
+
+
+static void prvSetupHW(void)
+{
+    //  Use UART to communicate to PC
+    prvSetupUART();
+
+    // Use on-board led and button
+    prvSetupNucleoButtonAndLED();
+}
+
+
+/* ***************************************************************************************************************** */
+
+void SetupHardware(void)
+{
+    DWT->CTRL |= (1<<0);            //  Enable DWT Cycle Count (DWTCYCCNT) Register.
+                                    //  This register keeps count of no. of clock cycles completed after processor reset.
+
+    RCC_DeInit();                   //  Reset clock to the default HSI configuration
+    SystemCoreClockUpdate();        //  Update system core clock variable to use the 16MHz value
+
+    prvSetupHW();                   //  Setup MCU specific peripherals
+
+    // To Record Events using Segger SysView
+    SEGGER_SYSVIEW_Conf();
+    SEGGER_SYSVIEW_Start();
+}
+
+
+
 void printMsg(char *msg)
 {
 	for(unsigned int i = 0; i<strlen(msg); i++)
 	{
 		while( USART_GetFlagStatus(USART2, USART_FLAG_TXE) != SET );		// Wait for transmission complete
-		USART_SendData(USART2, msg[i]);										// Send one character over UART
+		USART_SendData(USART2, msg[i]);										// Send a character over UART
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
