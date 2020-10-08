@@ -18,7 +18,7 @@ extern uint16_t ApplSwitchPins[14];
 #define TotalRelayPins	13
 extern uint16_t ApplRelayPins[13];
 
-void SetupAutomation(void);
+void vSetup_Automation(void);
 
 
 #ifdef __cplusplus

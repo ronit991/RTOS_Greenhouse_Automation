@@ -15,19 +15,16 @@
 /* ************************************************* Task Handles ************************************************** */
 
 // Continuous
-TaskHandle_t xCT1_H_SyncWithServer;
+TaskHandle_t xCT_Sync_With_Server;
 
 // Occasional
-TaskHandle_t xOT1_H_UpdateSensorData;
-TaskHandle_t xOT2_H_MonitorTankLevel;
-
+TaskHandle_t xOT_Update_Sensor_Data;
+TaskHandle_t xOT_Monitor_Tank_Level;
 
 // Rare -> Event Triggered
-/*TaskHandle_t xRT1_H_Doorbell;
-TaskHandle_t xRT2_H_StaircaseLights;
-TaskHandle_t xRT3_H_NightLight;
-TaskHandle_t xRT4_H_Curtains;
-*/
+TaskHandle_t xRT_Control_Temperature;
+TaskHandle_t xRT_Control_Humidity;
+TaskHandle_t xRT_Irrigation;
 
 /* ********************************************* Interrupt Functions *********************************************** */
 
@@ -35,70 +32,70 @@ TaskHandle_t xRT4_H_Curtains;
 /* ************************************************ Task Functions ************************************************* */
 
 // Continuous
-void vCT1_SyncWithServer(void* param);
+void vCT_Sync_With_Server(void* param);
 
 // Occasional
-void vOT1_UpdateSensorData(void* param);
-void vOT2_MonitorTankLevel(void* param);
+void vOT_Update_Sensor_Data(void* param);
+//void vOT_Monitor_Tank_Level(void* param);
 
 // Rare / Event_Triggered
-void vRT1_ControlTemperature(void* param);
-void vRT2_ControlHumidity(void* param);
-void vRT3_ControlLight(void* param);
-//void vRT4_FillWaterTank(void* param);
+void vRT_Control_Temperature(void* param);
+void vRT_Control_Humidity(void* param);
+//void vRT_Control_Light(void* param);
+//void vRT_FillWaterTank(void* param);
+void vRT_Irrigation(void* param);
 
 
 
 /* ************************************************ User Functions ************************************************* */
-void blinkLED(void);
+void vBlink_LED(void);
 
 
 
 /* ************************************************** User Types *************************************************** */
 typedef struct
 {
-	float temperature, avgTemperature;
-	float humidity, avgHumidity;
-	float soilMoisture, avgSoilMoisture;
-}SensorDataType;							// Variable of this structure is declared in the global space.
+	float fTemperature, fAvg_Temperature;
+	float fHumidity, fAvg_Humidity;
+	float fSoil_Moisture, fAvg_Soil_Moisture;
+}SensorDataType;	// Variable of this structure is declared in the global space.
 
 
 
 /* ************************************************* Global Space ************************************************** */
 
-char message[250];				// Message to be sent over UART to PC (for debugging purposes).
+char acMessage[250];				// Message to be sent over UART to PC (for debugging purposes).
 
-SensorDataType SensorData;		// Holds the data from various sensors
+SensorDataType xSensor_Data;		// Holds the data from various sensors
 
 // The following variables are used to calculate successive average of the sensor data
-float tempSampleSum = 0, humiditySampleSum = 0, soilMoistureSampleSum = 0;
-unsigned int noOfSamples_temp = 0, noOfSamples_humidity = 0, noOfSamples_soilMoisture = 0;
-#define sampleFreqHz 1
-unsigned int sampleTimeout = 0;
+float fTemp_Sample_Sum = 0, fHumidity_Sample_Sum = 0, fSoil_Moisture_Sample_Sum = 0;
+unsigned int ulNo_Of_Samples_temp = 0, ulNo_Of_Samples_humidity = 0, ulNo_Of_Samples_SoilMoisture = 0;
+#define SamplingFreqHz 1
+unsigned int ulSample_Timeout = 0;
 
 
 
 /* ***************************************************** main ****************************************************** */
 int main(void)
 {
-	SetupHardware();
-	SetupAutomation();
+	vSetup_Hardware();
+	vSetup_Automation();
 
-	blinkLED();
+	vBlink_LED();
 
 	// Create Tasks
-	xTaskCreate(vCT1_SyncWithServer,	"CT1: Sync Data with Server",		500, NULL, 1, &xCT1_H_SyncWithServer);
+	xTaskCreate(vCT_Sync_With_Server,       "CT: Sync Data with Server",   500, NULL, 1, &xCT_Sync_With_Server);
 
-	xTaskCreate(vOT1_UpdateSensorData,	"OT1: Update Sensor Data",			500, NULL, 2, &xOT1_H_UpdateSensorData);
-	xTaskCreate(vOT2_MonitorTankLevel,	"OT2: Monitor Water Tank Level",	500, NULL, 2, &xOT2_H_MonitorTankLevel);
+	xTaskCreate(vOT_Update_Sensor_Data,     "OT: Update Sensor Data",      500, NULL, 2, &xOT_Update_Sensor_Data);
+	//xTaskCreate(vOT_Monitor_Tank_Level, "OT: Monitor Water Tank Level",	500, NULL, 2, &xOT_Monitor_Tank_Level);
 
-	//xTaskCreate(vRT1_,			"RT1: ",	500, NULL, 3, &xRT1_H_);
-
-
-	// Create Queues
+	xTaskCreate(vRT_Control_Temperature,    "RT: Control Temperature",     500, NULL, 3, &xRT_Control_Temperature);
+	xTaskCreate(vRT_Control_Humidity,       "RT: Control Humidity",        500, NULL, 3, &xRT_Control_Humidity);
+	xTaskCreate(vRT_Irrigation,             "RT: Irrigation",              500, NULL, 3, &xRT_Irrigation);
 
 	// Start Scheduler
-	printMsg("\n\r Starting scheduler... \n\r");
+	vPrint_Msg("\n\r Starting scheduler... \n\r");
 	vTaskStartScheduler();
 
 	while(1);
@@ -109,7 +106,7 @@ int main(void)
 /* ******************************************** Task Function Definition ******************************************* */
 
 // Continuous
-void vCT1_SyncWithServer(void* param)
+void vCT_Sync_With_Server(void* param)
 {
 	//
 }
@@ -117,14 +114,14 @@ void vCT1_SyncWithServer(void* param)
 
 
 // Occasional
-void vOT1_UpdateSensorData(void* param)
+void vOT_Update_Sensor_Data(void* param)
 {
 	//
 }
 
 
 
-void vOT2_MonitorTankLevel(void* param)
+void vOT_Monitor_Tank_Level(void* param)
 {
 	//
 }
@@ -132,29 +129,33 @@ void vOT2_MonitorTankLevel(void* param)
 
 
 // Rare / Event-Triggered Tasks
-void vRT1_ControlTemperature(void* param)
+void vRT_Control_Temperature(void* param)
 {
 	//
 }
 
 
 
-void vRT2_ControlHumidity(void* param)
+void vRT_Control_Humidity(void* param)
 {
 	//
 }
 
 
 
-void vRT3_ControlLight(void* param)
+void vRT_Control_Light(void* param)
 {
 	//
 }
 
 
 
+void vRT_Irrigation(void* param)
+{
+    //
+}
 /* ******************************************* User Functions' Definition ****************************************** */
-void blinkLED(void)
+void vBlink_LED(void)
 {
 	for(int i = 0; i<6; i++)
 	{
@@ -173,3 +174,6 @@ void blinkLED(void)
 
 
 /* ****************************************** Interrupt Helper Functions ******************************************* */
+
+
+

@@ -49,7 +49,7 @@
  */
 
  // Print a message over UART
- void printMsg(char *msg);
+ void vPrint_Msg(char *msg);
 
 
  // Get system up-time in milliseconds
@@ -70,7 +70,7 @@
 
 
  // Configure Hardware used in the project
- void SetupHardware(void);
+ void vSetup_Hardware(void);
 
 
 #ifdef __cplusplus

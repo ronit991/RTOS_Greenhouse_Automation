@@ -124,7 +124,7 @@ static void prvSetupHW(void)
 
 /* ***************************************************************************************************************** */
 
-void SetupHardware(void)
+void vSetup_Hardware(void)
 {
     DWT->CTRL |= (1<<0);            //  Enable DWT Cycle Count (DWTCYCCNT) Register.
                                     //  This register keeps count of no. of clock cycles completed after processor reset.
@@ -141,7 +141,7 @@ void SetupHardware(void)
 
 
 
-void printMsg(char *msg)
+void vPrint_Msg(char *msg)
 {
 	for(unsigned int i = 0; i<strlen(msg); i++)
 	{

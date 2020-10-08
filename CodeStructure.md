@@ -36,7 +36,7 @@ All of the application layer code is structured within the following files:-
 | uint32_t                  | ul         | 'u' denotes "unsigned" and 'l' denotes "long"  |
 | uint16_t                  | us         | 'u' denotes "unsigned" and 's' denotes "short" |
 | uint8_t                   | uc         | 'u' denotes "unsigned" and 'c' denotes "char"  |
-| int                       | i          | 'l' denotes "long"                             |
+| int                       | l          | 'l' denotes "long"                             |
 | short                     | s          | 's' denotes "short"                            |
 | char                      | c          | 'c' denotes "char"                             |
 | float                     | f          | 'f' denotes "float"                            |
@@ -49,7 +49,10 @@ All of the application layer code is structured within the following files:-
 All of the variables follow **Snake_Case** afterwards.  
 Pointer types are prefixed with a _'p'_ followed by the _data-type-prefix_ followed by the _variable-name_.  
 
-Convention for arrays **isn't decided yet.** Any suggestions are welcome.
+
+**Array(s)**
+* a\<_data-type-prefix_\>\<_variable-name_\> for normal arrays.
+* ap\<_data-type-prefix_\>\<_variable-name_\> for array of pointers.
 
 Few examples are given below:
 ```C
@@ -57,6 +60,7 @@ uint32_t ulToken_Count;
 float fTemperature = 0;
 char cUART_Tx_buffer;
 void* pvBuffer;
+SensorDataType axSensorData[100];     // "SensorDataType" is a user-defined structure
 ```
 
 **Functions**
@@ -97,29 +101,25 @@ So far, tasks have been categorised into the following:-
     * These are the tasks that are short & run rarely.
     * Most of these are interrupt triggered and hence kept at the highest priority (3).
 
-Task functions & Task handles of each category are named as \<_task-type-prefix_\>\<index/number\>\<task-name\> in Snake_Case.
+Task functions & Task handles of each category are named as \<_task-type-prefix_\>\<_task-name_\> in Snake_Case.
 
 | Task Type        | Task Handle Prefix | TaskFunction Prefix |
 |------------------|:------------------:|:-------------------:|
-| Continuous Task  | xCTn_              | vCTn_               |
-| Occassional Task | xOTn_              | vOTn_               |
-| Rare Task        | xRTn_              | vRTn_               |
+| Continuous Task  | xCT_              | vCT_               |
+| Occassional Task | xOT_              | vOT_               |
+| Rare Task        | xRT_              | vRT_               |
 
 * 'x' is prefixed for task handles because it is a third-party data type (defined in FreeRTOS kernel).
 * 'v' is prefixed for task functions as FreeRTOS tasks never end, hence return void.
-* All task functions have " void* param " as the parameter.
-* 'n' in the above table represents index of the task (category-wise).
+* All task functions have _" void* param "_ as the parameter.
 
 Examples:
 ```C
-TaskHandle_t xCT1_Sync_With_Server;
+TaskHandle_t xCT_Sync_With_Server;
+TaskHandle_t xOT_Update_Sensor_Data;
 
-TaskHandle_t xOT1_Update_Sensor_Data;
-TaskHandle_t xOT2_Monitor_Tank_Level;
-
-void vCT1_SyncWithServer(void* param);
-
-void vOT1_UpdateSensorData(void* param);
+void vCT_SyncWithServer(void* param);
+void vOT_UpdateSensorData(void* param);
 ```
 
 ### Formatting Styles
