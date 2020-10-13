@@ -4,7 +4,7 @@ This Project aims to automate the functions/operations/tasks in a greenhouse.
 Major tasks:
 * Monitor and maintain the desired temperature in the greenhouse.
 * Monitor and maintain the desired humidity/moisture in the greenhouse.
-* Maintain appropriate level in the water reservoir.
+* Maintain appropriate water-level in the reservoir.
 * Automate the irrigation process based on soil moisture.
 * Notify the owner in case of fire, excessive wind, and crop damage due to excess IR/UV Light.
 * Sync everything with a cloud server.
